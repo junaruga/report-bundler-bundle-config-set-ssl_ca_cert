@@ -1,0 +1,117 @@
+#!/bin/bash
+
+# A reproducer for the Bundler `bundle config set ssl_ca_cert` issue.
+#
+# The reproducer creates files under the `./tmp` directory and installs
+# `rubygems-generate_index` and `webrick` gem.
+
+set -eu -o pipefail
+
+set -x
+
+TOP_DIR="$(cd "$(dirname "${0}")" && pwd)"
+TMP_DIR="${TOP_DIR}/tmp"
+BUILD_DIR="${TMP_DIR}/build"
+SERVER_DIR="${TMP_DIR}/server"
+CLIENT_DIR="${TMP_DIR}/client"
+WORK_DIR="${TMP_DIR}/work"
+PORT_HTTPS=18443
+GEM="gem"
+BUNDLE="bundle"
+
+# Clean up.
+rm -rf "${TMP_DIR}"
+mkdir -p "${BUILD_DIR}/ssl" "${SERVER_DIR}/ssl" "${CLIENT_DIR}/ssl"
+mkdir -p "${SERVER_DIR}/gem/gems" "${SERVER_DIR}/gem/cache" \
+    "${SERVER_DIR}/gem/specifications"
+mkdir -p "${WORK_DIR}"
+
+# Build a minimal gem.
+mkdir -p "${BUILD_DIR}/gem"
+
+cat > "${BUILD_DIR}/gem/hello.gemspec" << 'GEMSPEC'
+Gem::Specification.new do |s|
+  s.name = "hello"
+  s.version = "0.1.0"
+  s.summary = "Hello"
+  s.authors = ["Test"]
+  s.files = []
+end
+GEMSPEC
+
+pushd "${BUILD_DIR}/gem"
+"${GEM}" build hello.gemspec
+popd
+
+"${GEM}" install rubygems-generate_index
+
+cp -p "${BUILD_DIR}/gem/hello-0.1.0.gem" "${SERVER_DIR}/gem/gems/"
+cp -p "${BUILD_DIR}/gem/hello-0.1.0.gem" "${SERVER_DIR}/gem/cache/"
+cp -p "${BUILD_DIR}/gem/hello.gemspec" \
+    "${SERVER_DIR}/gem/specifications/hello-0.1.0.gemspec"
+"${GEM}" generate_index -d "${SERVER_DIR}/gem"
+
+"${GEM}" install webrick
+
+# Generate RSA CA and server certificates.
+openssl req \
+    -x509 \
+    -newkey rsa:2048 \
+    -keyout "${BUILD_DIR}/ssl/ca.key" \
+    -subj /CN=CA \
+    -nodes \
+    -out "${BUILD_DIR}/ssl/ca.crt"
+
+openssl req \
+    -newkey rsa:2048 \
+    -keyout "${BUILD_DIR}/ssl/server.key" \
+    -subj /CN=localhost \
+    -addext "subjectAltName=DNS:localhost" \
+    -nodes \
+    -out "${BUILD_DIR}/ssl/server.csr"
+
+openssl x509 \
+    -req \
+    -in "${BUILD_DIR}/ssl/server.csr" \
+    -CA "${BUILD_DIR}/ssl/ca.crt" \
+    -CAkey "${BUILD_DIR}/ssl/ca.key" \
+    -CAcreateserial \
+    -copy_extensions copyall \
+    -out "${BUILD_DIR}/ssl/server.crt"
+
+cp "${BUILD_DIR}/ssl/server.crt" "${SERVER_DIR}/ssl/"
+cp "${BUILD_DIR}/ssl/server.key" "${SERVER_DIR}/ssl/"
+cp "${BUILD_DIR}/ssl/ca.crt" "${CLIENT_DIR}/ssl/"
+
+# Start the WEBrick HTTPS server.
+ruby "${TOP_DIR}/server.rb" \
+    "${PORT_HTTPS}" \
+    "${SERVER_DIR}/gem" \
+    "${SERVER_DIR}/ssl/server.crt" \
+    "${SERVER_DIR}/ssl/server.key" &
+SERVER_PID=$!
+trap "kill ${SERVER_PID} 2>/dev/null || true" EXIT
+sleep 3
+
+# Run `bundle install` with `ssl_ca_cert`.
+pushd "${WORK_DIR}"
+
+# The `bundle config set --local ssl_ca_cert` command doesn't work.
+"${BUNDLE}" config set --local ssl_ca_cert "${CLIENT_DIR}/ssl/ca.crt"
+# The following workaround with SSL_CERT_FILE works.
+# export SSL_CERT_FILE="${CLIENT_DIR}/ssl/ca.crt"
+
+"${BUNDLE}" config set --local path vendor/bundle
+"${BUNDLE}" config list
+
+cat > Gemfile << GEMFILE
+source 'https://localhost:${PORT_HTTPS}'
+
+gem "hello", "0.1.0"
+GEMFILE
+
+"${BUNDLE}" install
+
+popd
+
+echo "OK"
