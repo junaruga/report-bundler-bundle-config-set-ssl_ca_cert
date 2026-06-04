@@ -151,6 +151,8 @@ OK
 
 ## ruby/rubygems development version
 
+This was tested at the ruby/rubygems latest master branch commit `ruby/rubygems@f22056bd50c7c179ccfcf45e2f49a13a44afcf92`.
+
 ### Error with `bundle config set ssl_ca_cert /path/to/ca`
 
 Run the reproducing script on development mode:
