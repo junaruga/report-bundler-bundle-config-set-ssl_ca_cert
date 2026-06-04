@@ -296,3 +296,5 @@ Bundled gems are installed into `./vendor/bundle`
 OK
 + kill 3211256
 ```
+
+See full log files in [log/dev](log/dev) directory.

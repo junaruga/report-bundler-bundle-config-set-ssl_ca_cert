@@ -1,0 +1,175 @@
++++ dirname /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/test.sh
+++ cd /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert
+++ pwd
++ TOP_DIR=/home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert
++ TMP_DIR=/home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp
++ BUILD_DIR=/home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build
++ SERVER_DIR=/home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server
++ CLIENT_DIR=/home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/client
++ WORK_DIR=/home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/work
++ PORT_HTTPS=18443
++ '[' 1 -eq 1 ']'
+++ pwd
++ RUBYGEMS_DIR=/home/jaruga/git/ruby/rubygems
++ GEM='ruby -I/home/jaruga/git/ruby/rubygems/lib /home/jaruga/git/ruby/rubygems/exe/gem'
++ BUNDLE=/home/jaruga/git/ruby/rubygems/bin/bundle
++ ruby -I/home/jaruga/git/ruby/rubygems/lib /home/jaruga/git/ruby/rubygems/exe/gem -v
+4.1.0.dev
++ /home/jaruga/git/ruby/rubygems/bin/bundle -v
+4.1.0.dev
++ rm -rf /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp
++ mkdir -p /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/gem
++ cat
++ pushd /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/gem
+~/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/gem ~/git/ruby/rubygems
++ ruby -I/home/jaruga/git/ruby/rubygems/lib /home/jaruga/git/ruby/rubygems/exe/gem build hello.gemspec
+WARNING:  licenses is empty, but is recommended. Use an license identifier from
+https://spdx.org/licenses or 'Nonstandard' for a nonstandard license,
+or set it to nil if you don't want to specify a license.
+WARNING:  no homepage specified
+WARNING:  no files specified
+WARNING:  make sure you specify the oldest ruby version constraint (like ">= 3.0") that you want your gem to support by setting the `required_ruby_version` gemspec attribute
+WARNING:  See https://guides.rubygems.org/specification-reference/ for help
+  Successfully built RubyGem
+  Name: hello
+  Version: 0.1.0
+  File: hello-0.1.0.gem
++ popd
+~/git/ruby/rubygems
++ ruby -I/home/jaruga/git/ruby/rubygems/lib /home/jaruga/git/ruby/rubygems/exe/gem install rubygems-generate_index
+Successfully installed rubygems-generate_index-1.2.0
+Parsing documentation for rubygems-generate_index-1.2.0
+Done installing documentation for rubygems-generate_index after 0 seconds
+1 gem installed
++ mkdir -p /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server/gem/gems /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server/gem/cache /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server/gem/specifications
++ cp -p /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/gem/hello-0.1.0.gem /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server/gem/gems/
++ cp -p /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/gem/hello-0.1.0.gem /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server/gem/cache/
++ cp -p /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/gem/hello.gemspec /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server/gem/specifications/hello-0.1.0.gemspec
++ ruby -I/home/jaruga/git/ruby/rubygems/lib /home/jaruga/git/ruby/rubygems/exe/gem generate_index -d /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server/gem
+Generating Marshal quick index gemspecs for 1 gems
+.
+Complete
+Generated Marshal quick index gemspecs: 0.000s
+Generating specs index
+Generated specs index: 0.000s
+Generating latest specs index
+Generated latest specs index: 0.000s
+Generating prerelease specs index
+Generated prerelease specs index: 0.000s
+Generating compact index files for 1 gems
+...
+Complete
+Generated compact index files: 0.000s
+Compressing indices
+Compressed indices: 0.000s
++ mkdir -p /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/ssl /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server/ssl /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/client/ssl
++ openssl req -x509 -newkey rsa:2048 -keyout /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/ssl/ca.key -subj /CN=CA -nodes -out /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/ssl/ca.crt
+.+.........+.+.........+..+...+...+...+.......+............+......+...............+.........+...+........+......+................+.........+.....+......+...+.+......+.................+............+...+.+.....+.+...+++++++++++++++++++++++++++++++++++++++*...+............+.......+...+..+............+++++++++++++++++++++++++++++++++++++++*....+.......+.........+.....+....+.........+......+.........+..+....+.....+.+........+......+.......+..+..........+..+....+............+.....+....+.....+...+.............+..+.......+.....+.+...+.................+....+.....+.+..+......+......+.............+......+......+...+..+......+....+...+...+.....+...+.+........+.+...........+...............+...+...+...+....+...+...+.....++++++
+...+...+..+.+..............+.+........................+......+.....+.+.........+++++++++++++++++++++++++++++++++++++++*......+.....+.........+++++++++++++++++++++++++++++++++++++++*..........+...........+...+...+............+.+..+.......+........+...................+......+.....+....+........+......+....+...+....................+.......+.....+......+.+...+........+....+.....+....+............+..+......+....+.....+..........+........+...+.......+.......................+.+...........+...+....+..+.+...............+...+.....+....+.....+..........+......+..+.........+......+....+........+...+...+.+..............+....+..+..........+.....+.........+....+...+.....+...+......+....+..+.......+............+.....++++++
+-----
++ openssl req -newkey rsa:2048 -keyout /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/ssl/server.key -subj /CN=localhost -addext subjectAltName=DNS:localhost -nodes -out /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/ssl/server.csr
+......+.....+..........+..+...+++++++++++++++++++++++++++++++++++++++*.........+.......+..+.......+.........+..+....+......+..+...+....+.........+.....+.+.....+...+..........+...........+.+...+..+....+..+...+......+.+..+.......+.........+.........+.....+......+......+...+.............+..+++++++++++++++++++++++++++++++++++++++*...............+....+.....+.+......+...........+....+...+...+............+.....+.............+...+......+...........+....+...........+.......+......+......+.....+....+..+.............+.....+.+.....+.+..+......+............+...+...............+....+..+....+.........+..+...+..........+..+...+......+.+...........+....+.....+...+.......+........+...+.......+...........+.+.........+.....+....+...+............+.....+...+....+......+...+..+...+....+..+.+...+.....+......+...+......+....+............+...+..+...............++++++
+.+.....+......+...+......+......+.+..+++++++++++++++++++++++++++++++++++++++*...+....+............+++++++++++++++++++++++++++++++++++++++*..+..+....+.....+.........+.+..+.......+..+..........+......+..+.......+......+........+......+.........+.+......+........+.+.........+.........+.....+..........+..+...+......+.+........++++++
+-----
++ openssl x509 -req -in /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/ssl/server.csr -CA /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/ssl/ca.crt -CAkey /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/ssl/ca.key -CAcreateserial -copy_extensions copyall -out /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/ssl/server.crt
+Certificate request self-signature ok
+subject=CN=localhost
++ cp /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/ssl/server.crt /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server/ssl/
++ cp /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/ssl/server.key /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server/ssl/
++ cp /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/build/ssl/ca.crt /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/client/ssl/
++ ruby -I/home/jaruga/git/ruby/rubygems/lib /home/jaruga/git/ruby/rubygems/exe/gem install webrick
+Successfully installed webrick-1.9.2
+Parsing documentation for webrick-1.9.2
+Done installing documentation for webrick after 0 seconds
+1 gem installed
++ mkdir -p /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server/log
++ SERVER_PID=3213294
++ trap 'kill ${SERVER_PID} 2>/dev/null || true' EXIT
++ sleep 3
++ ruby /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/server.rb 18443 /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server/gem /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server/ssl/server.crt /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/server/ssl/server.key
++ mkdir -p /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/work
++ pushd /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/work
+~/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/work ~/git/ruby/rubygems
++ /home/jaruga/git/ruby/rubygems/bin/bundle config set --local ssl_ca_cert /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/client/ssl/ca.crt
++ /home/jaruga/git/ruby/rubygems/bin/bundle config set --local path vendor/bundle
++ /home/jaruga/git/ruby/rubygems/bin/bundle config list
+Settings are listed in order of priority. The top value will be used.
+path
+Set for your local app (/home/jaruga/var/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/work/.bundle/config): "vendor/bundle"
+
+ssl_ca_cert
+Set for your local app (/home/jaruga/var/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/work/.bundle/config): "/home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/client/ssl/ca.crt"
+
++ cat
++ /home/jaruga/git/ruby/rubygems/bin/bundle install -V
+Running `bundle install --verbose` with bundler 4.1.0.dev
+Resolving dependencies because there's no lockfile
+HTTP GET https://localhost:18443/versions
+HTTP 206 Partial Content https://localhost:18443/versions
+HTTP GET https://localhost:18443/versions
+HTTP 200 OK https://localhost:18443/versions
+Fetching gem metadata from https://localhost:18443/
+Looking up gems ["hello"]
+Resolving dependencies...
+Using bundler 4.1.0.dev
+1:  bundler (4.1.0.dev) from /home/jaruga/var/git/ruby/rubygems/bundler/bundler.gemspec
+Fetching hello 0.1.0
+Retrying download gem from https://localhost:18443/ due to error (2/4): Gem::RemoteFetcher::FetchError SSL_connect returned=1 errno=0 peeraddr=127.0.0.1:18443 state=error: certificate verify failed (unable to get local issuer certificate) (https://localhost:18443/gems/hello-0.1.0.gem)
+Sleeping for 1.29 seconds before retry
+Retrying download gem from https://localhost:18443/ due to error (3/4): Gem::RemoteFetcher::FetchError SSL_connect returned=1 errno=0 peeraddr=127.0.0.1:18443 state=error: certificate verify failed (unable to get local issuer certificate) (https://localhost:18443/gems/hello-0.1.0.gem)
+Sleeping for 2.01 seconds before retry
+Retrying download gem from https://localhost:18443/ due to error (4/4): Gem::RemoteFetcher::FetchError SSL_connect returned=1 errno=0 peeraddr=127.0.0.1:18443 state=error: certificate verify failed (unable to get local issuer certificate) (https://localhost:18443/gems/hello-0.1.0.gem)
+Sleeping for 4.24 seconds before retry
+Bundler::InstallError: Bundler::HTTPError: Could not download gem from https://localhost:18443/ due to underlying error <SSL_connect returned=1 errno=0 peeraddr=127.0.0.1:18443 state=error: certificate verify failed (unable to get local issuer certificate) (https://localhost:18443/gems/hello-0.1.0.gem)>
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/rubygems_integration.rb:406:in 'Bundler::RubygemsIntegration#download_gem'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/source/rubygems.rb:531:in 'block in Bundler::Source::Rubygems#download_gem'
+  /home/jaruga/.local/ruby-4.1.0-debug-3ef48ef9c8-openssl-4.1.0-7194354488/lib/ruby/4.1.0+1/rubygems.rb:1068:in 'Gem.time'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/source/rubygems.rb:530:in 'Bundler::Source::Rubygems#download_gem'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/source/rubygems.rb:459:in 'Bundler::Source::Rubygems#fetch_gem'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/source/rubygems.rb:443:in 'Bundler::Source::Rubygems#fetch_gem_if_possible'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/source/rubygems.rb:575:in 'Bundler::Source::Rubygems#rubygems_gem_installer'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/source/rubygems.rb:184:in 'Bundler::Source::Rubygems#download'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/installer/gem_installer.rb:29:in 'Bundler::GemInstaller#download'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/installer/parallel_installer.rb:148:in 'Bundler::ParallelInstaller#do_download'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/installer/parallel_installer.rb:132:in 'block in Bundler::ParallelInstaller#worker_pool'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/worker.rb:70:in 'Bundler::Worker#apply_func'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/worker.rb:65:in 'block in Bundler::Worker#process_queue'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/worker.rb:56:in 'Kernel#loop'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/worker.rb:56:in 'Bundler::Worker#process_queue'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/worker.rb:98:in 'block (2 levels) in Bundler::Worker#create_threads'
+
+An error occurred while installing hello (0.1.0), and Bundler cannot continue.
+
+In Gemfile:
+  hello
+
+/home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/installer/parallel_installer.rb:208:in 'Bundler::ParallelInstaller#handle_error'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/installer/parallel_installer.rb:100:in 'Bundler::ParallelInstaller#call'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/installer/parallel_installer.rb:62:in 'Bundler::ParallelInstaller.call'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/installer.rb:198:in 'Bundler::Installer#install'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/installer.rb:83:in 'block in Bundler::Installer#run'
+  /home/jaruga/.local/ruby-4.1.0-debug-3ef48ef9c8-openssl-4.1.0-7194354488/lib/ruby/4.1.0+1/rubygems.rb:901:in 'block in Gem.open_file_with_flock'
+  /home/jaruga/.local/ruby-4.1.0-debug-3ef48ef9c8-openssl-4.1.0-7194354488/lib/ruby/4.1.0+1/rubygems.rb:889:in 'IO.open'
+  /home/jaruga/.local/ruby-4.1.0-debug-3ef48ef9c8-openssl-4.1.0-7194354488/lib/ruby/4.1.0+1/rubygems.rb:889:in 'Gem.open_file_with_flock'
+  /home/jaruga/.local/ruby-4.1.0-debug-3ef48ef9c8-openssl-4.1.0-7194354488/lib/ruby/4.1.0+1/rubygems.rb:875:in 'Gem.open_file_with_lock'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/process_lock.rb:13:in 'block in Bundler::ProcessLock.lock'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/shared_helpers.rb:106:in 'Bundler::SharedHelpers#filesystem_access'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/process_lock.rb:12:in 'Bundler::ProcessLock.lock'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/installer.rb:65:in 'Bundler::Installer#run'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/installer.rb:17:in 'Bundler::Installer.install'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/cli/install.rb:50:in 'Bundler::CLI::Install#run'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/cli.rb:296:in 'block in Bundler::CLI#install'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/settings.rb:147:in 'Bundler::Settings#temporary'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/cli.rb:295:in 'Bundler::CLI#install'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/vendor/thor/lib/thor/command.rb:28:in 'Bundler::Thor::Command#run'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in 'Bundler::Thor::Invocation#invoke_command'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/vendor/thor/lib/thor.rb:538:in 'Bundler::Thor.dispatch'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/cli.rb:35:in 'Bundler::CLI.dispatch'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/vendor/thor/lib/thor/base.rb:584:in 'Bundler::Thor::Base::ClassMethods#start'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/cli.rb:29:in 'Bundler::CLI.start'
+  /home/jaruga/var/git/ruby/rubygems/bundler/exe/bundle:28:in 'block in <top (required)>'
+  /home/jaruga/var/git/ruby/rubygems/bundler/lib/bundler/friendly_errors.rb:118:in 'Bundler.with_friendly_errors'
+  /home/jaruga/var/git/ruby/rubygems/bundler/exe/bundle:20:in '<top (required)>'
+  /home/jaruga/git/ruby/rubygems/bin/bundle:6:in 'Kernel#load'
+  /home/jaruga/git/ruby/rubygems/bin/bundle:6:in '<main>'
++ kill 3213294
