@@ -7,6 +7,21 @@
 
 set -eu -o pipefail
 
+# Parse options.
+DEV=0
+while [ $# -gt 0 ]; do
+    case "${1}" in
+        -d|--dev)
+            DEV=1
+            shift
+            ;;
+        *)
+            echo "Unknown option: ${1}" >&2
+            exit 1
+            ;;
+    esac
+done
+
 set -x
 
 TOP_DIR="$(cd "$(dirname "${0}")" && pwd)"
@@ -16,8 +31,18 @@ SERVER_DIR="${TMP_DIR}/server"
 CLIENT_DIR="${TMP_DIR}/client"
 WORK_DIR="${TMP_DIR}/work"
 PORT_HTTPS=18443
-GEM="gem"
-BUNDLE="bundle"
+
+if [ "${DEV}" -eq 1 ]; then
+    RUBYGEMS_DIR="$(pwd)"
+    GEM="ruby -I${RUBYGEMS_DIR}/lib ${RUBYGEMS_DIR}/exe/gem"
+    BUNDLE="${RUBYGEMS_DIR}/bin/bundle"
+else
+    GEM="gem"
+    BUNDLE="bundle"
+fi
+
+${GEM} -v
+"${BUNDLE}" -v
 
 # Clean up.
 rm -rf "${TMP_DIR}"
@@ -34,26 +59,26 @@ Gem::Specification.new do |s|
 end
 GEMSPEC
 pushd "${BUILD_DIR}/gem"
-"${GEM}" build hello.gemspec
+${GEM} build hello.gemspec
 popd
 
 # Generate gem index for a RubyGems server.
-"${GEM}" install rubygems-generate_index
+${GEM} install rubygems-generate_index
 mkdir -p \
-  "${SERVER_DIR}/gem/gems" \
-  "${SERVER_DIR}/gem/cache" \
-  "${SERVER_DIR}/gem/specifications"
+    "${SERVER_DIR}/gem/gems" \
+    "${SERVER_DIR}/gem/cache" \
+    "${SERVER_DIR}/gem/specifications"
 cp -p "${BUILD_DIR}/gem/hello-0.1.0.gem" "${SERVER_DIR}/gem/gems/"
 cp -p "${BUILD_DIR}/gem/hello-0.1.0.gem" "${SERVER_DIR}/gem/cache/"
 cp -p "${BUILD_DIR}/gem/hello.gemspec" \
     "${SERVER_DIR}/gem/specifications/hello-0.1.0.gemspec"
-"${GEM}" generate_index -d "${SERVER_DIR}/gem"
+${GEM} generate_index -d "${SERVER_DIR}/gem"
 
 # Generate RSA CA and server certificates.
 mkdir -p \
-  "${BUILD_DIR}/ssl" \
-  "${SERVER_DIR}/ssl" \
-  "${CLIENT_DIR}/ssl"
+    "${BUILD_DIR}/ssl" \
+    "${SERVER_DIR}/ssl" \
+    "${CLIENT_DIR}/ssl"
 openssl req \
     -x509 \
     -newkey rsa:2048 \
@@ -81,7 +106,7 @@ cp "${BUILD_DIR}/ssl/server.key" "${SERVER_DIR}/ssl/"
 cp "${BUILD_DIR}/ssl/ca.crt" "${CLIENT_DIR}/ssl/"
 
 # Start the WEBrick HTTPS server emulating a RubyGems server.
-"${GEM}" install webrick
+${GEM} install webrick
 mkdir -p "${SERVER_DIR}/log"
 ruby "${TOP_DIR}/server.rb" \
     "${PORT_HTTPS}" \
