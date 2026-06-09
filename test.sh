@@ -134,6 +134,12 @@ source 'https://localhost:${PORT_HTTPS}'
 gem "hello", "0.1.0"
 GEMFILE
 
+# Debug with ruby/debug.
+# rdbg -c \
+#     -e "b Bundler::Source::Rubygems#download_gem" \
+#     -e "b Gem::Request.configure_connection_for_https" \
+#     -e "c" \
+#     -- "${BUNDLE}" install -V
 "${BUNDLE}" install -V
 popd
 
