@@ -161,7 +161,7 @@ Run the reproducing script on development mode:
 $ pwd
 /home/jaruga/git/ruby/rubygems
 
-$ ~/git/report-bundler-bundle-config-set-ssl_ca_cert/test.sh
+$ ~/git/report-bundler-bundle-config-set-ssl_ca_cert/test.sh -d
 ...
 + /home/jaruga/git/ruby/rubygems/bin/bundle config set --local ssl_ca_cert /home/jaruga/git/report-bundler-bundle-config-set-ssl_ca_cert/tmp/client/ssl/ca.crt
 ...
